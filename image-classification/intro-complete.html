@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Advanced Automation - Getting Started with ml5.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- p5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+    <!-- ml5 -->
+    <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+
+  </head>
+
+  <body>
+    <script>
+
+/*
+
+This is the complete code at the end of the ml5js MobileNet classifier video here: https://www.youtube.com/watch?v=yNkAuWz5lnY
+You can use it to check when things are/aren't working as you build this yourself.
+
+*/
+
+      // Your code will go here
+      // open up your console - if everything loaded properly you should see 0.4.3
+      console.log('ml5 version:', ml5.version);
+
+      let puffin;
+
+
+      function modelReady(){
+
+        console.log("model is ready!!!");
+        mobileNet.predict(puffin, gotResults);
+
+
+      }
+
+      function gotResults(error, results){
+
+        if(error){
+          console.log(error)
+        }
+        else{
+
+          console.log(results);
+          let label = results[0].label;
+          let prob = results[0].confidence;
+          fill(0);
+          textSize(64);
+          text(label,10,height - 100);
+          createP(label)
+          createP(prob)
+        }
+
+      }
+      function imageReady(){
+        image(puffin,0,0, width,height);
+
+      }
+      function setup() {
+        createCanvas(640, 480);
+
+	       background(0);
+         puffin = createImg('images/puffin.jpg',imageReady)
+         puffin.hide();
+         mobileNet = ml5.imageClassifier('MobileNet',modelReady);
+
+
+      }
+
+      function draw() {
+
+
+              }
+    </script>
+  </body>
+</html>
