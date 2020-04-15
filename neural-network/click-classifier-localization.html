@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Advanced Automation - Neural Network</title>
+    <title>Advanced Automation - Neural Network - Localization Example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- p5 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
@@ -15,44 +15,47 @@
   <body>
     <script>
 
-/* Use this code to start going through the tutorial at https://youtu.be/8HEgeAbYphA beginning at 9:00.
 
-*/
 
 let screenSize = 400;
-numberCalibration = 10;
+numberCalibration = 20;
 let model;
 let targetLabel;
 let state = 'collection';
-let beacons = [[10,10],[390,390],[10,390]]//,[390,10]];
+let beacons = [[10,10],[390,390]];
+let numberOfDots = 20;
+let showDistanceLines = 0;
 
 
 function setup() {
         createCanvas(400, 400);
         background(230);
-        for(let i = 0;i<beacons.length;i++){
-          stroke(0);
-          fill(0,130,200);
-
-          ellipse(beacons[i][0], beacons[i][1], 12);
-          fill(0);
-
-        }
-
+        drawBeacons();
 
 
         let options = {
 
           inputs: ['distance1','distance2', 'distance3','distance4'],
           outputs: ['x','y'],
-          task: 'regression',
-          //debug: 'true',
+          task: 'regression'
 
 
         };
 
         model = ml5.neuralNetwork(options);
 
+
+}
+
+function drawBeacons(){
+  background(230);
+  for(let i = 0;i<beacons.length;i++){
+    stroke(0);
+    fill(0,130,200);
+    ellipse(beacons[i][0], beacons[i][1], 12);
+    fill(0);
+
+  }
 
 }
 
@@ -65,6 +68,26 @@ for(var i = 0;i<beacons.length;i++){
 
 }
 return distances;
+
+}
+
+function mouseMoved(){
+
+  if(showDistanceLines==1){
+    drawBeacons();
+    for(var i = 0;i<beacons.length;i++){
+
+        for(var j = 0;j<numberOfDots;j++){
+
+          fill(50,60,70);
+          ellipse(lerp(beacons[i][0],mouseX,j/numberOfDots), lerp(beacons[i][1],mouseY,j/numberOfDots), 0.1);
+
+        }
+
+
+    }
+  }
+
 
 }
 
